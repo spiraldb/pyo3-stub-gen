@@ -81,6 +81,15 @@ impl_builtin!(PyBackedBytes, "bytes");
 impl_builtin!(PyType, "type");
 impl_builtin!(CompareOp, "int");
 
+impl PyStubType for PyIterator {
+    fn type_output() -> TypeInfo {
+        TypeInfo {
+            name: "collections.abc.Iterator".to_string(),
+            import: hashset! { "collections.abc".into() },
+        }
+    }
+}
+
 #[cfg_attr(all(not(pyo3_0_25), Py_LIMITED_API), expect(unused_macros))]
 macro_rules! impl_simple {
     ($ty:ty, $mod:expr, $pytype:expr) => {

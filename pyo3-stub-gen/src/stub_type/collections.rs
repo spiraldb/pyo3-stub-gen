@@ -66,6 +66,20 @@ impl<T: PyStubType, const N: usize> PyStubType for [T; N] {
     }
 }
 
+impl<T: PyStubType> PyStubType for &[T] {
+    fn type_input() -> TypeInfo {
+        let TypeInfo { name, mut import } = T::type_input();
+        import.insert("typing".into());
+        TypeInfo {
+            name: format!("typing.Sequence[{}]", name),
+            import,
+        }
+    }
+    fn type_output() -> TypeInfo {
+        TypeInfo::list_of::<T>()
+    }
+}
+
 impl<T: PyStubType, State> PyStubType for HashSet<T, State> {
     fn type_output() -> TypeInfo {
         TypeInfo::set_of::<T>()
